@@ -4,6 +4,7 @@ import { PORT } from "./config/env.js";
 import userRouter from "./routes/user.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import subscriptionRouter from "./routes/subscription.routes.js";
+import connectToDB from "./database/mongodb.js";
 
 const app = express();
 
@@ -15,8 +16,10 @@ app.get("/", (req, res) => {
   res.send("Subscription API is up!");
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Subscription API is running on port: ${PORT}`);
+
+  await connectToDB();
 });
 
 export default app;
