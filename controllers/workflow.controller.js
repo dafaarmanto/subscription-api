@@ -11,7 +11,7 @@ export const sendReminders = serve(async (context) => {
 
   const subscription = await fetchSubscription(context, subscriptionId);
 
-  if (!subscription || subscription.status !== active) return;
+  if (!subscription || subscription.status !== "active") return;
 
   const renewalDate = dayjs(subscription.renewalDate);
 
@@ -43,7 +43,7 @@ export const sendReminders = serve(async (context) => {
 });
 
 const fetchSubscription = async (context, subscriptionId) => {
-  return await context.run("get subscription", () => {
+  return await context.run("get subscription", async () => {
     return Subscription.findById(subscriptionId).populate("user", "name email");
   });
 };
