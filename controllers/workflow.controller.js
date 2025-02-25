@@ -1,8 +1,8 @@
-import { createRequire } from "module";
-import Subscription from "../models/subscription.model";
 import dayjs from "dayjs";
+import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const { serve } = require("@upstash/workflow");
+const { serve } = require("@upstash/workflow/express");
+import Subscription from "../models/subscription.model.js";
 
 const REMINDERS = [7, 5, 2, 1];
 
@@ -32,7 +32,13 @@ export const sendReminders = serve(async (context) => {
       );
     }
 
-    await triggerReminder(context, `Reminder ${daysBefore} days before`);
+    if (dayjs().isSame(reminderDate, "day")) {
+      await triggerReminder(
+        context,
+        `Reminder ${daysBefore} days before reminder`,
+        subscription
+      );
+    }
   }
 });
 
